@@ -1,5 +1,6 @@
 package com.senjuid.androidcamera
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,8 +41,8 @@ class Main2Activity : AppCompatActivity() {
     }
 
     /** Uncomment if the activity isn't androidx.appcompat.app.AppCompatActivity */
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         cameraPlugin?.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
-    }*/
+    }
 }

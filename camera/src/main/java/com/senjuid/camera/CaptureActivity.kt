@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -16,6 +17,9 @@ import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Flash
 import com.otaliastudios.cameraview.size.SizeSelectors
+import com.senjuid.camera.faceantispoofing.FaceAntiSpoofing
+import com.senjuid.camera.mtcnn.MTCNN
+import com.senjuid.camera.util.MyUtil
 import kotlinx.android.synthetic.main.activity_capture.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +42,9 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
     private var countDownTimer: CountDownTimer? = null
     private lateinit var muteController: MuteController
     private var bitmapResult: Bitmap? = null
+    private var mtcnn: MTCNN? = null
+    private var fas: FaceAntiSpoofing? = null
+    private var isFace: Boolean = false
 
     // MARK: Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +53,7 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         muteController = MuteController(this)
+        isFace = true
 
         // Add camera listener
         camera_view.addCameraListener(object : CameraListener() {
@@ -75,12 +83,12 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
 
         // Add back button listener
         btn_retake.setOnClickListener {
-            viewMode(true)
+            viewMode(true, isFace)
         }
 
         // Add back button listener
         btn_retake.setOnClickListener {
-            viewMode(true)
+            viewMode(true, isFace)
         }
 
         // Add select picture button listener
@@ -102,7 +110,7 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
 
 
         // set view mode
-        viewMode(true)
+        viewMode(true, isFace)
 
         // prepare (grant permission and make directory)
         prepare()
@@ -142,6 +150,14 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
             }
         }
         countDownTimer?.start()
+
+        // Init face processing
+        try {
+            mtcnn = MTCNN(assets)
+            fas = FaceAntiSpoofing(assets)
+        } catch (ioe: IOException) {
+            ioe.printStackTrace()
+        }
     }
 
     public
@@ -172,17 +188,55 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
         var maxSize = intent.getIntExtra("max_size", 0)
         if (maxSize > 0) {
             data?.toBitmap(maxSize!!, maxSize!!) {
-                iv_preview.setImageBitmap(it)
-                showProgressDialog(false)
-                viewMode(false)
-                bitmapResult = it
+//                iv_preview.setImageBitmap(it)
+//                showProgressDialog(false)
+//                viewMode(false)
+//                bitmapResult = it
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val faceBmp = detectFace(it)
+                    val isSpoofing = detectSpoofing(faceBmp)
+
+                    withContext(Dispatchers.Main) {
+                        bitmapResult = faceBmp
+                        iv_preview_face.setImageBitmap(bitmapResult)
+                        showProgressDialog(false)
+                        viewMode(false, isFace)
+                        if (isSpoofing) {
+                            tv_status.setTextColor(Color.parseColor("#ff0000"))
+                            tv_status.text = "You are spoofing.\nPlease try again!"
+                        } else {
+                            tv_status.setTextColor(Color.parseColor("#00ff00"))
+                            tv_status.text = "Nice!"
+                        }
+                    }
+                }
             }
         } else {
             data?.toBitmap {
-                iv_preview.setImageBitmap(it)
-                showProgressDialog(false)
-                viewMode(false)
-                bitmapResult = it
+//                iv_preview.setImageBitmap(it)
+//                showProgressDialog(false)
+//                viewMode(false)
+//                bitmapResult = it
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val faceBmp = detectFace(it)
+                    val isSpoofing = detectSpoofing(faceBmp)
+
+                    withContext(Dispatchers.Main) {
+                        bitmapResult = faceBmp
+                        iv_preview_face.setImageBitmap(bitmapResult)
+                        showProgressDialog(false)
+                        viewMode(false, isFace)
+                        if (isSpoofing) {
+                            tv_status.setTextColor(Color.parseColor("#00ff00"))
+                            tv_status.text = "You are spoofing"
+                        } else {
+                            tv_status.setTextColor(Color.parseColor("#ff0000"))
+                            tv_status.text = "Nice!"
+                        }
+                    }
+                }
             }
         }
     }
@@ -226,15 +280,23 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
         layout_progress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun viewMode(isCapture: Boolean) {
+    private fun viewMode(isCapture: Boolean, isFace: Boolean) {
         if (isCapture) {
             btn_select_picture.visibility = View.GONE
-            iv_preview.visibility = View.GONE
             btn_retake.visibility = View.GONE
+            if (isFace) {
+                layout_preview_face.visibility = View.GONE
+            } else {
+                iv_preview.visibility = View.GONE
+            }
         } else {
             btn_select_picture.visibility = View.VISIBLE
-            iv_preview.visibility = View.VISIBLE
             btn_retake.visibility = View.VISIBLE
+            if (isFace) {
+                layout_preview_face.visibility = View.VISIBLE
+            } else {
+                iv_preview.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -288,5 +350,39 @@ class CaptureActivity : AppCompatActivity(), RunTimePermission.RunTimePermission
 
     override fun permissionDenied() {
         finish()
+    }
+
+    private fun detectFace(bitmap: Bitmap?): Bitmap? {
+        bitmap?.let {
+            val bitmapCopy = it.copy(it.config, false)
+            val faceBox = mtcnn?.detectFaces(bitmapCopy, bitmapCopy.width / 5)
+            if (faceBox?.size == 0) {
+                return null
+            }
+
+            val box = faceBox?.get(0)
+            box?.toSquareShape()
+            box?.limitSquare(bitmapCopy.width, bitmapCopy.height)
+
+            val rect = box?.transform2Rect()
+            return MyUtil.crop(bitmapCopy, rect)
+        }
+        return null
+    }
+
+    private fun detectSpoofing(bitmap: Bitmap?): Boolean {
+        bitmap?.let { bmp ->
+            fas?.laplacian(bmp)?.let { lap ->
+                if (lap >= FaceAntiSpoofing.LAPLACIAN_THRESHOLD) {
+                    fas?.antiSpoofing(bmp)?.let { score ->
+                        if (score < FaceAntiSpoofing.THRESHOLD) {
+                            return false
+                        }
+                    }
+                }
+            }
+        }
+        return true
+
     }
 }

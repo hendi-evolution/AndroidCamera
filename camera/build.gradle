@@ -18,7 +18,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -27,7 +26,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -50,6 +48,9 @@ dependencies {
     // Activity Extension
     implementation "androidx.activity:activity:1.2.0-alpha02"
     implementation "androidx.activity:activity-ktx:1.2.0-alpha02"
+
+    // Tensor flow
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
 }
 repositories {
     mavenCentral()
