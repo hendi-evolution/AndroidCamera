@@ -1,215 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.otaliastudios.cameraview.CameraView
-        android:id="@+id/camera_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:cameraAudio="off"
-        app:cameraEngine="camera2"
-        app:cameraExperimental="true"
-        app:cameraFacing="front"
-        app:cameraFlash="off"
-        app:cameraMode="picture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btn_switch_camera"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_change_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <ImageView
-        android:id="@+id/btn_flash_on"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="24dp"
-        android:clickable="true"
-        android:padding="6dp"
-        android:src="@drawable/ic_flash_on"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageView
-        android:id="@+id/btn_flash_off"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="24dp"
-        android:clickable="true"
-        android:padding="6dp"
-        android:src="@drawable/ic_flash_off"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/hintTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:padding="5dp"
-        android:text="Tap to take picture"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/btn_take_picture"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btn_take_picture"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_circle_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_blank"
-        android:clickable="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_preview_face"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_blank"
-        android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_detected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Face Detected"
-            android:textColor="#00ff00"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/frame"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/frame"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="64dp"
-            android:background="#00ff00"
-            android:padding="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_preview_face"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/light_blank" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Nice"
-            android:textColor="#00ff00"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/frame" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageButton
-        android:id="@+id/btn_select_picture"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="24dp"
-        android:background="@drawable/button_circle_camera_success"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_check"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:padding="6dp"
-        android:src="@drawable/ic_back_white"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageButton
-        android:id="@+id/btn_retake"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_camera1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/layout_progress"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.8"
-            android:background="@android:color/black" />
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_back_white" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp" />
-
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/img_gd_log"
+            android:visibility="visible" />
     </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.otaliastudios.cameraview.CameraView
+                android:id="@+id/camera_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
+                android:keepScreenOn="true"
+                app:cameraAudio="off"
+                app:cameraEngine="camera2"
+                app:cameraExperimental="true"
+                app:cameraFacing="front"
+                app:cameraFlash="off"
+                app:cameraGestureTap="autoFocus"
+                app:cameraMode="picture"
+                app:cameraUseDeviceOrientation="false" />
+
+            <FrameLayout
+                android:id="@+id/layout_controller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp"
+                android:visibility="visible">
+
+                <ImageButton
+                    android:id="@+id/btn_switch_camera"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_change_camera" />
+
+                <ImageView
+                    android:id="@+id/hintTextView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_camera1" />
+
+                <ImageButton
+                    android:id="@+id/btn_take_picture"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/button_circle_camera" />
+
+                <ImageView
+                    android:id="@+id/btn_flash_off"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|right"
+                    android:clickable="true"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_flash_off"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/btn_flash_on"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|right"
+                    android:clickable="true"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_flash_on"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/btn_select_picture" />
+
+            <ImageButton
+                android:id="@+id/btn_select_picture"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="24dp"
+                android:background="@drawable/button_circle_camera_success"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_check" />
+
+            <ImageButton
+                android:id="@+id/btn_retake"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="24dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_camera1" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_progress"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
+                android:background="@android:color/black" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

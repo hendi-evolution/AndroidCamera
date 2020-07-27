@@ -3,10 +3,5 @@
     <color name="colorPrimaryDark">#d35400</color>
     <color name="colorPrimary">#df7619</color>
     <color name="colorAccent">#f39c12</color>
-    <color name="colorError">#e74c3c</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorSkeleton">#dddddd</color>
-    <color name="light_blank">#212121</color>
-    <color name="selected_option">#009688</color>
-    <color name="red">#D72026</color>
 </resources>

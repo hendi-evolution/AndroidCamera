@@ -41,7 +41,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:3.7.0"
 
     // Camera View
-    implementation 'com.otaliastudios:cameraview:2.6.2'
+    implementation 'com.otaliastudios:cameraview:2.6.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
 
